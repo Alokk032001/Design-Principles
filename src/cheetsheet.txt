@@ -1,0 +1,190 @@
+# UML Relationships Cheat Sheet
+
+---
+
+## 1. **INHERITANCE** (Generalization)
+**Concept:** B is a more specific kind of A — B gets everything A has, plus its own additions.
+**Type:** IS-A relationship
+
+### Key Identifiers
+- B is a **specialized version of A**
+- B uses `extends` keyword
+- B inherits fields + methods from A
+- B can **override** parent behaviour
+- "Is-a" sentence sounds natural
+- **Diagram:** Solid line + open triangle
+
+### Example
+```java
+class Dog extends Animal {
+  // Dog IS-A Animal
+  String breed;
+
+  @Override
+  void speak() {
+    System.out.println("Woof");
+  }
+}
+```
+
+---
+
+## 2. **REALIZATION** (Interface Implementation)
+**Concept:** A is a contract. B signs it — promising to implement every method, getting no code in return.
+**Type:** Implements relationship
+
+### Key Identifiers
+- A is an **interface or abstract class**
+- B uses `implements` keyword
+- B provides its **own body for every method**
+- Multiple classes can realize the same interface
+- B gets **no inherited state** from A
+- **Diagram:** Dashed line + open triangle
+
+### Example
+```java
+interface Flyable {
+  void fly(); // contract only
+}
+
+class Bird implements Flyable {
+  public void fly() {
+    // Bird's OWN implementation
+  }
+}
+
+class Airplane implements Flyable {
+  public void fly() {
+    // completely different impl
+  }
+}
+```
+
+---
+
+## 3. **DEPENDENCY** (Uses - Temporary)
+**Concept:** A borrows B for a moment — inside a method — then lets it go. No lasting connection.
+**Type:** Weakest, most temporary relationship
+
+### Key Identifiers
+- B appears **only as method parameter**
+- B appears **as a local variable** in a method
+- B appears **as a return type**
+- B is **NOT stored as a field** in A
+- **Diagram:** Dashed line + open arrow
+
+### Example
+```java
+class Chef {
+  // Knife NOT stored as field
+
+  // Parameter → dependency
+  void chop(Knife knife) {
+    knife.cut();
+  }
+
+  // Return type → dependency
+  Receipt generateBill() {
+    return new Receipt(...);
+  }
+}
+```
+
+---
+
+## 4. **ASSOCIATION** (Uses - Permanent Reference)
+**Concept:** A keeps a reference to B as a field. They interact regularly but neither owns the other.
+**Type:** Permanent, but no ownership
+
+### Key Identifiers
+- B is **stored as a field** inside A
+- Both classes **exist independently**
+- **No ownership** — B isn't created by A
+- Can be **unidirectional or bidirectional**
+- B is **passed in** (not created) by A
+- **Diagram:** Solid line + open arrow
+
+### Example
+```java
+class Doctor {
+  // Patient stored as field = Association
+  private Patient patient;
+
+  // B passed IN, not created here
+  Doctor(Patient patient) {
+    this.patient = patient;
+  }
+
+  void treat() {
+    patient.giveMedicine();
+  }
+}
+```
+
+---
+
+## 5. **AGGREGATION** (Has-A - Weak Ownership)
+**Concept:** A contains B, but B has a life of its own. B was created elsewhere and can outlive A.
+**Type:** Weak ownership / Loosely coupled
+
+### Key Identifiers
+- B is **stored as a field** in A
+- B is **created OUTSIDE A** and passed in
+- B exists **before A and after A is gone**
+- Often a collection: `List<B>`
+- "Has-a" but **B survives independently**
+- **Diagram:** Solid line + open diamond (on owner)
+
+### Example
+```java
+class University {
+  // Students passed in, not created here
+  private List<Student> students;
+
+  University(List<Student> students) {
+    this.students = students;
+  }
+  // Students live on after University closes
+}
+```
+
+---
+
+## 6. **COMPOSITION** (Has-A - Strong Ownership)
+**Concept:** A creates B, owns B completely. When A dies, B dies. B has no meaning outside of A.
+**Type:** Strong ownership / Tightly coupled
+
+### Key Identifiers
+- B is **created INSIDE A** (in constructor)
+- B is **not shared** with anything else
+- **B has no meaning without A**
+- A **controls the full lifecycle** of B
+- "Has-a" and **B cannot exist alone**
+- **Diagram:** Solid line + filled diamond (on owner)
+
+### Example
+```java
+class Car {
+  // Engine created INSIDE Car
+  private Engine engine;
+
+  Car() {
+    // Car owns and creates Engine
+    this.engine = new Engine();
+  }
+  // Engine destroyed when Car is destroyed
+}
+```
+
+---
+
+## Quick Reference Table
+
+| Relationship | Keyword | Stored Field | Created By | Ownership | Diagram |
+|---|---|---|---|---|---|
+| **Inheritance** | `extends` | N/A | N/A | Full (child gets all) | Solid line + open △ |
+| **Realization** | `implements` | N/A | N/A | Contract binding | Dashed line + open △ |
+| **Dependency** | none | ❌ NO | ❌ NO | Temporary use | Dashed line + → |
+| **Association** | none | ✅ YES | ❌ NO (passed in) | None | Solid line + → |
+| **Aggregation** | none | ✅ YES | ❌ NO (passed in) | Weak | Solid line + ◇ |
+| **Composition** | none | ✅ YES | ✅ YES | Strong | Solid line + ◆ |

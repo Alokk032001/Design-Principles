@@ -27,12 +27,22 @@ class Video {
     }
 }
 
+interface Playlist {
+    // Method to return an iterator for the collection
+    PlaylistIterator createIterator();
+}
+
 // ========== YouTubePlaylist class ==========
-class YouTubePlaylist {
+class YouTubePlaylist implements Playlist {
     private List<Video> videos = new ArrayList<>();
 
     public void addVideo(Video video) {
         videos.add(video);
+    }
+
+    @Override
+    public PlaylistIterator createIterator() {
+        return new YouTubePlaylistIterator(videos);
     }
 
     public List<Video> getVideos() {
@@ -43,6 +53,7 @@ class YouTubePlaylist {
 // ========== Iterator interface ==========
 interface PlaylistIterator {
     boolean hasNext();
+
     Video next();
 }
 
@@ -80,7 +91,8 @@ class Main {
         System.out.println("YouTube Playlist:");
         while (iterator.hasNext()) {
             Video video = iterator.next();
-            System.out.println("- " + video.getTitle() + " (" + video.getGenre() + ", " + video.getDuration() + " mins)");
+            System.out
+                    .println("- " + video.getTitle() + " (" + video.getGenre() + ", " + video.getDuration() + " mins)");
         }
     }
 }
