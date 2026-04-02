@@ -33,7 +33,7 @@ abstract class NotificationSender {
 class EmailNotificationSender extends NotificationSender {
     @Override
     protected String composeMessage(String formattedMessage) {
-        return "Email Body: " + formattedMessage;
+        return "<html><body><p>" + formattedMessage + "</p></body></html>";
     }
 
     @Override
