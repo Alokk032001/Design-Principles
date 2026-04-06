@@ -49,7 +49,7 @@ class ResumeEditor {
         private final String experience;
         private final List<String> skills;
 
-        public ResumeMemento(String name, String education, String experience, List<String> skills) {
+        private ResumeMemento(String name, String education, String experience, List<String> skills) {
             this.name = name;
             this.education = education;
             this.experience = experience;
